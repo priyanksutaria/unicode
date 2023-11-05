@@ -1,14 +1,36 @@
-import React from 'react';
-import {View, Text, Touchable, TouchableOpacity, Dimensions} from 'react-native';
+import React, { useState } from 'react';
+import {View, Text,TextInput, Touchable, TouchableOpacity, Dimensions, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Bground from './Bacground';
 import Btn from './Btn';
 import Field from './Field';
 import { air,darkair, dblu } from './Constants';
+import auth from '@react-native-firebase/auth';
 
-const Signup = props => {
+
+const Signup = (props) => {
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const createuser =()=>{
+    auth()
+  .createUserWithEmailAndPassword(email,password)
+  .then(() => {
+    props.navigation.navigate("MainC");
+  })
+  .catch(error => {
+    if (error.code === 'auth/email-already-in-use') {
+      Alert('That email address is already in use!');
+    }
+
+    if (error.code === 'auth/invalid-email') {
+      Alert('That email address is invalid!');
+    }
+
+    console.error(error);
+  });
+  }
   return (
-    <Bground>
+    <View style={{backgroundColor: darkair}}>
       <View style={{alignItems: 'center'}}>
         <Text
           style={{
@@ -62,11 +84,19 @@ const Signup = props => {
           </View>
           <Field placeholder="First Name" />
           <Field placeholder="Last Name" />
-          <Field
-            placeholder="Email / Username"
-            keyboardType={'email-address'}
-          />
-          <Field placeholder="Password" secureTextEntry={true} />
+          <TextInput
+              style={{borderRadius: 100,color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220, 220)', marginVertical: 10}}
+              placeholderTextColor={darkair}
+              placeholder="Email / Username"
+              onChangeText={text=>setEmail(text)}
+              value = {email}></TextInput>
+           <TextInput
+              style={{borderRadius: 100,color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220, 220)', marginVertical: 10}}
+              placeholderTextColor={darkair}
+              placeholder="Password"
+              secureTextEntry={true}
+              onChangeText={text=>setPassword(text)}
+              value = {password}></TextInput>
           <Field placeholder="Confirm Password" secureTextEntry={true} />
           </View>
           <View style={{
@@ -117,8 +147,7 @@ const Signup = props => {
             bgColor={dblu}
             btnLabel="Signup"
             Press={() => {
-              alert('Accout created successfully!');
-              props.navigation.navigate('Home');
+              createuser();
             }}
           />
          </View>
@@ -142,7 +171,7 @@ const Signup = props => {
             </View>
           </View>
       </View>
-    </Bground>
+    </View>
   );
 };
 

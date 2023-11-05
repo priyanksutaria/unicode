@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640163501443",
+    "project_id": "newspunk-d82b4",
+    "storage_bucket": "newspunk-d82b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640163501443:android:57446107cf514c56e352b6",
+        "android_client_info": {
+          "package_name": "com.doobidoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq1XmRZJzU-Cy9ikdfy_u5fSWg5ysRWLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

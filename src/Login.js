@@ -1,14 +1,34 @@
-import React from 'react';
-import {View, Text, Touchable, TouchableOpacity, Dimensions} from 'react-native';
-import Bground from './Bacground';
+import React, { useState } from 'react';
+import {View, Text, Touchable, TouchableOpacity, Dimensions, TextInput} from 'react-native';
 import Btn from './Btn';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {air, darkair} from './Constants';
-import Field from './Field';
-
+import {air, darkair, dblu} from './Constants';
+import auth from '@react-native-firebase/auth';
 const Login = (props) => {
+  const [email,checkEmail]=useState('');
+  const [password,checkPassword]=useState('');
+  const signIn = () => {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        props.navigation.navigate("MainC")
+      })
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          Alert('No user found with this email address.');
+        }
+        if (error.code === 'auth/wrong-password') {
+          Alert('The password is incorrect.');
+        }
+        if (error.code === 'auth/invalid-email') {
+          Alert('Invalid email address.');
+        }
+        console.error(error);
+      });
+  };
+
   return (
-    <Bground>
+    <View style={{backgroundColor: darkair}}>
       <View style={{alignItems: 'center'}}>
         <Text
           style={{
@@ -17,7 +37,7 @@ const Login = (props) => {
             fontWeight: 'bold',
             marginVertical: 20,
           }}>
-          Login
+          NewsPunk
         </Text>
         <View
           style={{
@@ -42,11 +62,19 @@ const Login = (props) => {
             }}>
             Login to your account
           </Text>
-          <Field
-            placeholder="Email / Username"
-            keyboardType={'email-address'}
-          />
-          <Field placeholder="Password" secureTextEntry={true} />
+          <TextInput
+              style={{borderRadius: 100,color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220, 220)', marginVertical: 10}}
+              placeholderTextColor={darkair}
+              placeholder="Email / Username"
+              onChangeText={text=>checkEmail(text)}
+              value = {email}></TextInput>
+          <TextInput
+              style={{borderRadius: 100,color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220, 220)', marginVertical: 10}}
+              placeholderTextColor={darkair}
+              placeholder="Password"
+              secureTextEntry={true}
+              onChangeText={text=>checkPassword(text)}
+              value = {password}></TextInput>
           <View
             style={{alignItems: 'flex-end', width: '78%', paddingRight: 16, marginBottom: 50}}>
             <Text style={{color: darkair, fontWeight: 'bold', fontSize: 16}}>
@@ -75,7 +103,9 @@ const Login = (props) => {
              <Text style={{color: darkair, fontSize: 20, fontWeight: 900}}>ahead in the news.</Text>
           </View>
           </View>
-          <Btn textColor='white' bgColor={darkair} btnLabel="Login" Press={() => {alert('Logged in!');props.navigation.navigate("Home")}} />
+          <Btn textColor='white' bgColor={dblu} btnLabel="Login" Press={() => {
+            signIn();
+          }} />
           <View style={{ display: 'flex', flexDirection :'row', justifyContent: "center", paddingTop: 15 }}>
             <Text style={{ color: 'grey',fontSize: 16, fontWeight:"bold" }}>Don't have an account ? </Text>
             <TouchableOpacity onPress={() => props.navigation.navigate("Signup")}>
@@ -84,7 +114,7 @@ const Login = (props) => {
           </View>
         </View>
       </View>
-    </Bground>
+    </View>
   );
 };
 
